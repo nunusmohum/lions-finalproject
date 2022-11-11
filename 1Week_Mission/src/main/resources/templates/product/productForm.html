@@ -1,0 +1,31 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main-content-container container px-4 mt-3">
+    <div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-4 mb-sm-0">
+            <h3 class="page-title">도서 등록</h3>
+        </div>
+    </div>
+    <div class="card card-small mb-3">
+        <div class="card-body">
+
+            <form th:object="${productForm}" class="add-new-post" id="form_post" method="post">
+                <div th:replace="error/form_error :: formErrorsFragment"></div>
+                <label for="subject" class="form-label">제목</label>
+                <input th:field="*{subject}" class="form-control form-control-lg mb-3" type="text" placeholder="제목을 입력해주세요">
+                <label for="price" class="form-label">가격</label>
+                <input th:field="*{price}" class="form-control form-control-lg mb-3" type="text" placeholder="가격을 입력해주세요">
+                <label for="hashTag" class="form-label">키워드</label>
+                <select class="form-control text-center"
+                        th:name="keyword">
+                    <option th:each="keyword : ${keywordList}"
+                            th:value="${keyword.content}" th:text="${keyword.content}"></option>
+                </select>
+                <input class="btn btn-primary float-right mt-3" type="submit" value="등록"/>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

@@ -1,0 +1,46 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main-content-container container">
+    <div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-4 mb-sm-0">
+            <h3 class="page-title">글 목록</h3>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <table class="table">
+            <thead>
+            <tr class="text-center">
+                <th>번호</th>
+                <th style="width:50%">제목</th>
+                <th>작성자</th>
+                <th>작성날짜</th>
+                <th>수정날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="post, loop : ${postList}">
+                <td th:text="${loop.index + 1}"></td>
+                <td class="text-start">
+                    <a th:href="@{|/post/${post.id}|}" th:text="${post.subject}"></a>
+                    <th:block th:utext="${post.extra_hashTagLinks}" />
+                </td>
+                <td><span th:if="${post.author != null}" th:text="${post.author.username}"></span></td>
+                <td th:text="${#temporals.format(post.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(post.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+</script>
+</html>

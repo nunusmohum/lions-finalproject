@@ -1,0 +1,40 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://thymeleaf.org"
+        layout:decorate="~{layout/layout}">
+
+<main layout:fragment="main">
+    <section class="section section-post-list container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-book"></i>
+                주문 목록
+            </h1>
+
+            <div class="card mb-3">
+                <table class="table">
+                    <thead>
+                    <tr class="text-center">
+                        <th>주문번호</th>
+                        <th>주문이름</th>
+                        <th>주문날짜</th>
+                        <th>주문상태</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-center" th:each="order : ${orders}">
+                        <td th:text="${order.id}"></td>
+                        <td class="text-start">
+                            <a th:href="@{|/order/${order.id}|}" th:text="${order.name}"></a>
+                        </td>
+                        <td th:text="${#temporals.format(order.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                        <td th:text="${order.readyStatus}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</html>

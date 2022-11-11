@@ -1,0 +1,79 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main-content-container container">
+    <div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-4 mb-sm-0">
+            <h3 class="page-title">도서 목록</h3>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <table class="table">
+            <thead>
+            <tr class="text-center">
+                <th>번호</th>
+                <th style="width:50%">도서 이름</th>
+                <th>가격</th>
+                <th>작가</th>
+                <th>작성 날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center" th:each="product, loop : ${paging}">
+                <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
+                <td class="text-start">
+                    <a th:href="@{|/product/${product.id}|}" th:text="${product.subject}"></a>
+                </td>
+                <td th:text="${product.price}"></td>
+                <td><span th:if="${product.author != null}" th:text="${product.author.nickname}"></span></td>
+                <td th:text="${#temporals.format(product.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 페이징처리 시작 -->
+        <div class="">
+            <a sec:authorize="hasAuthority('AUTHOR')" th:href="@{|/product/write|}" type="button" class="mb-2 me-2 btn btn-primary float-end">등록하기</a>
+            <div th:if="${!paging.isEmpty()}">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                        <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                            <span>이전</span>
+                        </a>
+                    </li>
+                    <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                        th:if="${
+                                (( paging.number == 0 ) and ( page <= paging.number+4 )) or
+                                (( paging.number == 1 ) and ( page <= paging.number+3 and page >= paging.number-1)) or
+                                (( paging.number > 1 and paging.number < paging.totalPages-2 ) and ( page <= paging.number+2 and page >= paging.number-2 )) or
+                                (( paging.number == paging.totalPages-2 ) and ( page >= paging.number-3 and page <= paging.number+1 )) or
+                                (( paging.number == paging.totalPages-1 ) and ( page >= paging.number-4 ))
+                              }"
+                        th:classappend="${page == paging.number} ? 'active'"
+                        class="page-item">
+                        <a th:text="${page+1}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                        <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                            <span>다음</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 페이징처리 끝 -->
+        <form th:action="@{/product/list}" method="get" id="searchForm">
+            <input type="hidden" id="page" name="page" th:value="${paging.number}">
+        </form>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+</script>
+</html>

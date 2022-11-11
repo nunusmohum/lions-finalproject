@@ -1,0 +1,20 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>프로파일</h4>
+        </div>
+    </div>
+    <div class="mb-3">
+        <div>아이디 : <span th:text="${#authentication.principal.username}"></span></div>
+        <div>작가명 : <span th:text="${#authentication.principal.nickname}"></span></div>
+        <div>이메일 : <span th:text="${#authentication.principal.email}"></span></div>
+    </div>
+    <div>
+        <a class="btn btn-primary" th:href="@{/member/modify}">회원정보 수정</a>
+        <a class="btn btn-primary" th:href="@{/member/modifyPassword}">비밀번호 변경</a>
+    </div>
+</div>
+</html>

@@ -1,0 +1,7 @@
+spring:
+  mail:
+    password: NEED_TO_INPUT_GMAIL_APP_PASSWORD
+
+toss:
+  test:
+    secretKey: NEED_TO_INPUT_TOSS_TEST_SECRETKEY

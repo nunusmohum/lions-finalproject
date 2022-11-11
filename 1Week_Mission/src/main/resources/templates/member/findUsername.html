@@ -1,0 +1,19 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+<div layout:fragment="content" class="container my-3">
+    <div class="my-3 border-bottom">
+        <div>
+            <h4>아이디 찾기</h4>
+        </div>
+    </div>
+    <form th:action="@{/member/findUsername}" th:object="${findUsernameForm}" method="post">
+        <div th:replace="error/form_error :: formErrorsFragment"></div>
+        <div class="mb-3">
+            <label for="email" class="form-label">가입시 이메일</label>
+            <input type="text" th:field="*{email}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">아이디 찾기</button>
+    </form>
+</div>
+</html>

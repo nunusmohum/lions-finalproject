@@ -1,0 +1,38 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://thymeleaf.org"
+      layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main-content-container container px-4 mt-3">
+    <div class="card card-small mb-3 mt-5">
+        <div class="card-body">
+
+            <form th:object="${postForm}" class="add-new-post" id="form_post" method="post">
+                <div th:replace="error/form_error :: formErrorsFragment"></div>
+                <input th:field="*{subject}" class="form-control form-control-lg mb-3" type="text" placeholder="제목을 입력해주세요">
+                <input th:field="*{hashTagContents}" class="form-control form-control-lg mb-3" type="text" placeholder="#태그1 #태그2">
+                <textarea th:field="*{content}" name="text" style="display: none" id="content"></textarea>
+                <textarea th:field="*{contentHtml}" name="text" style="display: none" id="contentHtml"></textarea>
+                <div id="editor"></div>
+                <input class="btn btn-primary float-right mt-3" type="submit" value="등록"/>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="script" type='text/javascript' th:inline="javascript">
+    const Editor = toastui.Editor;
+
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '600px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical',
+        initialValue: document.getElementById("content").innerText
+    });
+
+    $("#form_post").on("submit", function () {
+        $("#content").val(editor.getMarkdown());
+        $("#contentHtml").val(editor.getHTML());
+    })
+</script>
+</html>

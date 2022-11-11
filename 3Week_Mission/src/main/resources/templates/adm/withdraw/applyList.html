@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/adm/layout/layout}">
+
+<head>
+    <title>출금신청 목록</title>
+</head>
+
+<main layout:fragment="main">
+    <div class="container mx-auto">
+        <div>
+            <h1>출금신청 목록</h1>
+
+            <div class="overflow-x-auto">
+                <table class="table table-compact w-full">
+                    <thead>
+                    <tr>
+                        <th>출금신청번호</th>
+                        <th>은행명</th>
+                        <th>계좌번호</th>
+                        <th>출금액</th>
+                        <th>신청날짜</th>
+                        <th>신청인</th>
+                        <th>비고</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="withdraw : ${withdraws}">
+                        <td th:text="${withdraw.id}"></td>
+                        <td th:text="${withdraw.bankName}"></td>
+                        <td th:text="${withdraw.bankAccountNo}"></td>
+                        <td th:text="${withdraw.price}"></td>
+                        <td th:text="${#temporals.format(withdraw.createDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${withdraw.applicant.name}"></td>
+                        <td>
+                            <a th:if="${withdraw.applicable}" href="javascript:;" onclick="$(this).next().submit();"
+                               class="btn btn-primary btn-xs">출금처리</a>
+                            <span th:if="${!withdraw.applicable}">출금완료</span>
+                            <form method="POST" th:action="@{|/adm/withdraw/${withdraw.id}|}"
+                                  hidden></form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+</html>

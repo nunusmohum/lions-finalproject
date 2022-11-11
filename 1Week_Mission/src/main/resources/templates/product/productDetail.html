@@ -1,0 +1,46 @@
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://thymeleaf.org/"
+        layout:decorate="~{layout/layout}">
+
+<div layout:fragment="content" class="main-content-container container px-5 my-5">
+    <div class="page-header row no-gutters py-4">
+        <div class="col-12 text-center text-sm-left mb-4 mb-sm-0">
+            <h3 class="page-title">도서 상세</h3>
+        </div>
+    </div>
+    <div class="card card-small mt-5 mb-3">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+            <h4 th:text="${product.subject}" class="m-0"></h4>
+            <div class="font-weight-light">
+                <div th:text="${#temporals.format(product.createDate, 'yyyy-MM-dd HH:mm')}" class="m-0"></div>
+                <div th:text="${product.author.nickname}" class="m-0 text-right"></div>
+            </div>
+        </div>
+        <div class="row my-3 mr-1">
+            <div class="ml-3 col mt-auto">
+                <a class="" th:href="@{/product/list}"><span>목록으로</span></a>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="col text-end me-2 pr-0"
+                 th:if="${product.author != null and #authentication.getPrincipal().getUsername() == product.author.username}">
+                <a href="javascript:void(0);" th:data-uri="@{|/product/${product.id}/delete|}"
+                   class="delete btn btn-primary mr-2"
+                   th:text="삭제"></a>
+                <a th:href="@{|/product/${product.id}/modify|}" class="btn btn-primary mr-2 "
+                   th:text="수정"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" type='text/javascript' th:inline="javascript">
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            };
+        });
+    });
+
+</script>
+</html>
